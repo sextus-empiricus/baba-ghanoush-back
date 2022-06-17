@@ -1,18 +1,18 @@
 import express, {json} from 'express';
 import cors from 'cors';
 import 'express-async-errors';
-import {globalErrorHandler, ValidationError} from './utils/globalErrorHandler';
+import {globalErrorHandler} from './utils/globalErrorHandler';
+import {config} from './config/config';
 
-const port = process.env.PORT || 3001;
+const port = config.app.port || 3001;
 
 const app = express();
 
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: config.app.corsOrigin,
 }));
 
 app.use(json());
-
 
 app.get('/', async (req, res) => {
     res.send('🍆');
