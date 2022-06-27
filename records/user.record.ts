@@ -1,4 +1,4 @@
-import {UserEntity} from '../types/User';
+import {UserEntity} from '../types/user';
 import {pool} from '../db/pool';
 import {v4 as uuid} from 'uuid';
 import {hash} from 'bcrypt';
@@ -45,7 +45,20 @@ class UserRecord implements UserEntity {
         const [resp] = (await pool.execute(
             `SELECT *
              FROM users
-             WHERE id = :id`, {id}
+             WHERE id = :id
+               AND isActive = true`, {id}
+        ) as DbResult)[0];
+
+        return resp ? new UserRecord(resp) : null;
+    }
+
+    static async findUserByNameOrEmail(nameOrEmail: string): Promise<UserRecord | null> {
+        const [resp] = (await pool.execute(
+            `SELECT *
+             FROM users
+             WHERE name = :nameOrEmail
+                OR email = :nameOrEmail
+                 AND isActive = true`, {nameOrEmail}
         ) as DbResult)[0];
 
         return resp ? new UserRecord(resp) : null;
@@ -60,4 +73,6 @@ class UserRecord implements UserEntity {
     }
 }
 
-export {UserRecord};
+export {
+    UserRecord
+};
