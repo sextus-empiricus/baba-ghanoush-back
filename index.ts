@@ -7,7 +7,6 @@ import {router as authRouter} from './routes/auth.route';
 import {router as usersRouter} from './routes/users.route';
 import {router as tradesRouter} from './routes/trades.route';
 import rateLimit from 'express-rate-limit';
-import {protectMiddleware} from './routes/middleware/protect.middleware';
 
 const app = express();
 
@@ -28,8 +27,9 @@ app.get('/', async (req, res) => {
     res.send('🍆');
 })
 
-app.use('/api/v1/users', protectMiddleware, usersRouter);
-app.use('/api/v1/trades', protectMiddleware, tradesRouter);
+//TODO routes it protected:
+app.use('/api/v1/users', usersRouter);
+app.use('/api/v1/trades', tradesRouter);
 app.use('/api/v1/auth', authRouter);
 
 app.use(globalErrorHandler);
