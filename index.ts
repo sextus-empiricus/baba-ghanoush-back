@@ -11,12 +11,12 @@ import rateLimit from 'express-rate-limit';
 
 const app = express();
 
-app.use(rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 200,
-    standardHeaders: true,
-    legacyHeaders: false,
-}))
+// app.use(rateLimit({
+//     windowMs: 15 * 60 * 1000,
+//     max: 200,
+//     standardHeaders: true,
+//     legacyHeaders: false,
+// }))
 
 app.use(cors({
     origin: config.app.corsOrigin,
@@ -28,8 +28,8 @@ app.get('/', async (req, res) => {
     res.send('🍆');
 })
 
-app.use('/api/v1/users', protectMiddleware, usersRouter);
-app.use('/api/v1/trades', protectMiddleware, tradesRouter);
+app.use('/api/v1/users', usersRouter);
+app.use('/api/v1/trades', tradesRouter);
 app.use('/api/v1/auth', authRouter);
 
 app.use(globalErrorHandler);

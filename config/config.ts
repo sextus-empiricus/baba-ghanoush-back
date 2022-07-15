@@ -4,6 +4,7 @@ export const config = {
         // corsOrigin: 'https://bbg-megak-fe.herokuapp.com'
         corsOrigin: '*'
     },
+
     db: {
         port: 3306,
         host: 'eu-cdbr-west-03.cleardb.net',
