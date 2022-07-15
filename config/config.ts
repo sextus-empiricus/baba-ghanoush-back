@@ -1,7 +1,7 @@
 export const config = {
     app: {
         port: process.env.PORT || 3001,
-        corsOrigin: 'https://bbg-megak-test-fe.herokuapp.com'
+        corsOrigin: 'https://bbg-megak-fe.herokuapp.com/'
     },
     db: {
         port: 3306,
