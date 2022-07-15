@@ -21,6 +21,7 @@ app.get('/', async (req, res) => {
     res.send('🍆');
 })
 
+//@TODO - napis api do pobierania icon
 app.use('/api/v1/users', usersRouter); //@TODO - have to be protected;
 app.use('/api/v1/trades', tradesRouter);
 app.use('/api/v1/auth', authRouter);

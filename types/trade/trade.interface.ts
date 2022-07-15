@@ -4,7 +4,9 @@ export interface TradeEntity {
     boughtFor: number;
     amount: number;
     price: number;
+    userId: string;
+    isActive?: boolean;
     boughtIn?: Date;
-    isActive?: boolean,
-    userId: string
+    soldIn?:Date;
+    profit?: number;
 }

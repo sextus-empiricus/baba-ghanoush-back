@@ -22,17 +22,15 @@ class ValidationError extends Error {
             incorrectData: 'Incorrect email address or password.'
         },
         fetch: {
-          notFound: 'Fetched data not found.'
+            notFound: 'Fetched data not found.'
         },
         auth: {
-          notAuthorised: 'Please log in.'
+            notAuthorised: 'Please log in.'
         }
     };
 }
 
 const globalErrorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
-    console.log(err);
-
     res
         .status(err instanceof ValidationError ? 400 : 500)
         .json({

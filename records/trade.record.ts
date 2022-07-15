@@ -14,6 +14,8 @@ class TradeRecord implements TradeEntity {
     boughtIn?: Date;
     isActive: boolean;
     userId: string
+    profit?: number
+    soldIn?: Date;
 
     constructor(obj: TradeEntity) {
         this.id = obj.id ?? uuid();
@@ -24,6 +26,8 @@ class TradeRecord implements TradeEntity {
         this.boughtIn = obj.boughtIn ?? new Date();
         this.isActive = obj.isActive ?? true;
         this.userId = obj.userId;
+        this.soldIn = obj.soldIn ?? null;
+        this.profit = obj.profit ?? null;
     }
 
     //dynamic:
@@ -52,13 +56,33 @@ class TradeRecord implements TradeEntity {
         return (resp as DbResult).map((el: any) => new TradeRecord(el)) ?? null;
     }
 
-    static async getActiveTradesOfUser(userId: string): Promise<TradeRecord[]> {
+
+    static async getAllTradesOfUser(userId: string): Promise<TradeRecord[]> {
         const [resp] = await pool.execute(
             `SELECT *
              FROM trades
              WHERE userId = :userId
-               AND trades.isActive = true`, {userId});
-        console.log(resp);
+             ORDER BY boughtIn
+            `, {
+                userId,
+            });
+        return (resp as DbResult).map((el: any) => new TradeRecord(el)) ?? null;
+    }
+
+    static async getFilteredTradesOfUser(userId: string, dateFrom?: string, dateTo?: string, showHistory?: boolean): Promise<TradeRecord[]> {
+        const [resp] = await pool.execute(
+            `SELECT *
+             FROM trades
+             WHERE userId = :userId
+               AND trades.isActive = :showHistory
+               AND CAST(trades.boughtIn AS DATE) BETWEEN :dateFrom AND :dateTo
+             ORDER BY boughtIn
+            `, {
+                userId,
+                showHistory,
+                dateFrom: dateFrom ?? '1900-01-01',
+                dateTo: dateTo ?? '2100-01-01'
+            });
         return (resp as DbResult).map((el: any) => new TradeRecord(el)) ?? null;
     }
 
@@ -72,10 +96,20 @@ class TradeRecord implements TradeEntity {
         return resp ? new TradeRecord(resp) : null;
     }
 
-    static async removeTradeById(id: string): Promise<void> {
+    static async cashTradeById(id: string, soldIn: Date, profit: number): Promise<void> {
         await pool.execute(
             `UPDATE trades
-             SET isActive = false
+             SET isActive = false,
+                 soldIn   = :soldIn,
+                 profit   = :profit
+             WHERE id = :id`, {id, soldIn, profit}
+        )
+    }
+
+    static async deleteTradeById(id: string): Promise<void> {
+        await pool.execute(
+            `DELETE
+             FROM trades
              WHERE id = :id`, {id}
         )
     }
