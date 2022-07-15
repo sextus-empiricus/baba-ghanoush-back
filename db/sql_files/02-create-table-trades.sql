@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS trades;
 
 CREATE TABLE trades
 (
-    id        VARCHAR(36) PRIMARY KEY  DEFAULT (uuid()),
+    id        VARCHAR(36) PRIMARY KEY,
     boughtIn  DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP,
     currency  VARCHAR(20)     NOT NULL,
     boughtFor DECIMAL(10, 3)  NOT NULL,
